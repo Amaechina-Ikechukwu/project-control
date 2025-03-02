@@ -16,6 +16,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@kinde-oss/kinde-node-express": "^1.6.0",
     "@types/cors": "^2.8.17",
     "cors": "^2.8.5",
     "express": "^4.21.2",

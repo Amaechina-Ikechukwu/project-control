@@ -5,9 +5,18 @@ import {
   limiter,
   logger,
   basicMiddleware,
+  verifier,
 } from "./middleware/security";
 import projectRouter from "./routes/projects";
 import cors from "cors";
+import projectRouterV2 from "./routes/v2/projects";
+const {
+  setupKinde,
+  protectRoute,
+  getUser,
+  GrantType,
+} = require("@kinde-oss/kinde-node-express");
+
 const serviceAccount = "./xx.json";
 const allowedOrigins = ["http://localhost:3000", process.env.ALLOWED];
 
@@ -48,6 +57,7 @@ app.use((req, res, next) => {
   }
 });
 app.use("/projects", projectRouter);
+app.use("/projects/v2", verifier, projectRouterV2);
 
 // Start Server
 app.listen(port, () => {

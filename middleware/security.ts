@@ -2,7 +2,10 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import type { Request, Response, NextFunction } from "express";
+import { getUser, protectRoute } from "@kinde-oss/kinde-node-express";
+const { jwtVerify } = require("@kinde-oss/kinde-node-express");
 
+export const verifier = jwtVerify(process.env.KINDE_SUB_DOMAIN);
 // Security Headers
 export const securityHeaders = helmet();
 
