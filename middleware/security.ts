@@ -4,9 +4,7 @@ import morgan from "morgan";
 import type { Request, Response, NextFunction } from "express";
 import { getUser, protectRoute } from "@kinde-oss/kinde-node-express";
 import { getProjectByApiKey } from "../functions/v2/apikeys";
-const { jwtVerify } = require("@kinde-oss/kinde-node-express");
 
-export const verifier = jwtVerify(process.env.KINDE_SUB_DOMAIN);
 // Security Headers
 export const securityHeaders = helmet();
 

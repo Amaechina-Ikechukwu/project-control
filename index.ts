@@ -5,7 +5,6 @@ import {
   limiter,
   logger,
   basicMiddleware,
-  verifier,
 } from "./middleware/security";
 import projectRouter from "./routes/projects";
 import cors from "cors";
@@ -28,7 +27,19 @@ admin.initializeApp({
 // Express App
 const app = express();
 const port = process.env.PORT || 4000;
+const config = {
+  clientId: process.env.KINDE_CLIENT_ID,
+  issuerBaseUrl: process.env.KINDE_ISSUER_URL,
+  siteUrl: process.env.KINDE_SITE_URL || "http://localhost:4000",
+  secret: process.env.KINDE_CLIENT_SECRET,
+  redirectUrl: process.env.KINDE_SITE_URL || "http://localhost:4000",
+  scope: "openid profile email",
+  grantType: GrantType.AUTHORIZATION_CODE,
+  unAuthorisedUrl: "http://localhost:4000/unauthorised",
+  postLogoutRedirectUrl: process.env.KINDE_SITE_URL || "http://localhost:4000",
+};
 
+setupKinde(config, app);
 // Middleware
 app.use(express.json()); // JSON Parser
 app.use(securityHeaders);
@@ -57,7 +68,8 @@ app.use((req, res, next) => {
   }
 });
 app.use("/projects", projectRouter);
-app.use("/projects/v2", verifier, projectRouterV2);
+app.use("/projects/v2", protectRoute, getUser, projectRouterV2);
+
 
 // Start Server
 app.listen(port, () => {
